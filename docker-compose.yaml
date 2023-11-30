@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  craftista:
+    driver: bridge
+
+services:
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "80:3000"
+    networks:
+      - craftista
+
+  catalogue:
+    image: catalogue
+    build:
+      context: ./catalogue
+    ports:
+      - "5000:5000"
+    networks:
+      - craftista
+
+  recco:
+    image: recco
+    build:
+      context: ./recommendation
+    ports:
+      - "8080:8080"
+    networks:
+      - craftista
+
+  voting:
+    image: voting
+    build:
+      context: ./voting
+    ports:
+      - "8081:8080"
+    depends_on: 
+      - catalogue
+    networks:
+      - craftista
+
