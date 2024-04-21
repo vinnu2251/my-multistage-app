@@ -1,12 +1,10 @@
-version: '3.8'
-
 networks:
   craftista:
     driver: bridge
 
 services:
   frontend:
-    image: frontend
+    image: my/craftista-frontend:dev
     build:
       context: ./frontend
     ports:
@@ -15,7 +13,7 @@ services:
       - craftista
 
   catalogue:
-    image: catalogue
+    image: my/craftista-catalogue:dev
     build:
       context: ./catalogue
     ports:
@@ -23,8 +21,17 @@ services:
     networks:
       - craftista
 
+  catalogue-db:
+    image: postgres:16.2-alpine3.19
+    environment:
+      POSTGRES_USER: devops
+      POSTGRES_PASSWORD: devops
+      POSTGRES_DB: catalogue
+    networks:
+      - craftista
+
   recco:
-    image: recco
+    image: my/craftista-recco:dev
     build:
       context: ./recommendation
     ports:
@@ -33,7 +40,7 @@ services:
       - craftista
 
   voting:
-    image: voting
+    image: my/craftista-voting:dev
     build:
       context: ./voting
     ports:
