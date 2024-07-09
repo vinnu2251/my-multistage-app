@@ -1,5 +1,9 @@
 pipeline {
   agent any
+
+  options {
+        timeout(time: 10, unit: 'MINUTES') // Adjust the timeout as needed
+    }
   stages {
     stage('compile voting app') {
       steps {
