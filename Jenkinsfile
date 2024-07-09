@@ -37,17 +37,17 @@ pipeline {
       }
     }
 
-        stages {
-        stage('Build') {
+    stage('Build') {
             steps {
                 echo 'Building Docker image'
                 script {
-                    // Build the Docker image
-                    docker.build("${env.DOCKER_IMAGE_NAME}:latest", './voting')
+                    // Build the Docker image specifying the path to the Dockerfile
+                    docker.build("${env.DOCKER_IMAGE_NAME}:latest", "./voting")
                 }
             }
         }
-        stage('Push') {
+
+    stage('Push') {
             steps {
                 echo 'Pushing Docker image to Docker Hub'
                 script {
@@ -58,8 +58,9 @@ pipeline {
                     }
                 }
             }
-        }
     }
+
+    
 
 
   }
