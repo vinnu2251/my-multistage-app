@@ -1,9 +1,7 @@
 pipeline {
   agent any
 
-  options {
-        timeout(time: 10, unit: 'MINUTES') // Adjust the timeout as needed
-    }
+
   stages {
     stage('compile voting app') {
       steps {
@@ -20,6 +18,17 @@ pipeline {
         dir(path: 'voting') {
           sh 'mvn clean test'
         }
+
+      }
+    }
+
+    stage('packaging voting'){
+      steps{
+        dir(path: 'voting') {
+          sh 'mvn package -DskipTests'
+        }
+
+        archiveArtifacts(artifacts: '**/target/*.jar')
 
       }
     }
