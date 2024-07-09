@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+   environment {
+        DOCKER_CREDENTIALS_ID = 'docker-cred' // ID of the Docker Hub credentials in Jenkins
+        DOCKER_IMAGE_NAME = 'vinay7944/my-multitier-app-voting'
+    }
 
   stages {
     stage('compile voting app') {
@@ -32,6 +36,31 @@ pipeline {
 
       }
     }
+
+        stages {
+        stage('Build') {
+            steps {
+                echo 'Building Docker image'
+                script {
+                    // Build the Docker image
+                    docker.build("${env.DOCKER_IMAGE_NAME}:latest", './voting')
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                echo 'Pushing Docker image to Docker Hub'
+                script {
+                    // Login to Docker Hub
+                    docker.withRegistry('https://index.docker.io/v1/', "${env.DOCKER_CREDENTIALS_ID}") {
+                        // Push the Docker image
+                        docker.image("${env.DOCKER_IMAGE_NAME}:latest").push()
+                    }
+                }
+            }
+        }
+    }
+
 
   }
   tools {
