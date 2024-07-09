@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {
-        stage('Build voting app') {
+        stage('compile voting app') {
             steps {
                 echo 'compiling the voting app'
                 dir(path: 'voting'){
